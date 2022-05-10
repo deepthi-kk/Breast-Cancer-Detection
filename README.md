@@ -25,7 +25,7 @@ Features are computed from a digitized image of a fine needle aspirate (FNA) of 
 
 ## Models used for Analysis
 
-The dataset is trained using three models
+The dataset is trained using four models
 
 * Support Vector Machine(SVM)
 * Logistic Regression
