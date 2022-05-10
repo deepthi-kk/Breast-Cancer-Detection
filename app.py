@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from marshmallow import ValidationError
 
-from ml.svm import SupportVectorMachine
+from ml.ml import MachineLearningModel
 from model import PredictReq
 from model import PredictRes
 
@@ -26,6 +26,6 @@ def predict():
 
 if __name__ == '__main__':
     print('init: ML Model...started')
-    ml_model = SupportVectorMachine()
+    ml_model = MachineLearningModel()
     print('init:ML Model is completed')
     app.run(host='0.0.0.0', port=5000)

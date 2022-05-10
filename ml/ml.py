@@ -1,3 +1,5 @@
+import pickle
+
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -6,10 +8,14 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
 
-class SupportVectorMachine:
+class MachineLearningModel:
     def __init__(self) -> None:
         self.model = None
-        self._fit()
+        self._fit2()
+
+    def _fit2(self) -> None:
+        with open('./ml/models/model.pkl', 'rb') as f:
+            self.model = pickle.load(f)
 
     def _fit(self) -> None:
         df = pd.read_csv('./ml/data.csv')
@@ -44,6 +50,7 @@ class SupportVectorMachine:
 
     def predict(self, radius_mean, perimeter_mean, area_mean, concavity_mean, concave_points_mean, radius_worst,
                 perimeter_worst, area_worst, concavity_worst, concave_points_worst):
+
         result = self.model.predict(
             np.array([[radius_mean, perimeter_mean, area_mean, concavity_mean, concave_points_mean, radius_worst,
                        perimeter_worst, area_worst, concavity_worst, concave_points_worst]]))
