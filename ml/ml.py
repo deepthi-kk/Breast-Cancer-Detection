@@ -19,7 +19,7 @@ class MachineLearningModel:
             self.model = pickle.load(f)
 
     def _fit(self) -> None:
-        df = pd.read_csv('./ml/data.csv')
+        df = pd.read_csv('./ml/models/data/data.csv')
         df = df.rename(
             columns={'concave points_mean': 'concave_points_mean', 'concave points_worst': 'concave_points_worst'})
         df.drop(columns='Unnamed: 32', axis=1, inplace=True)
@@ -49,9 +49,8 @@ class MachineLearningModel:
         self.model = SVC(C=10, kernel='linear').fit(X_train, y_train)
         print('score: ', self.model.score(X_test, y_test))
 
-
     def _get_scaled_data(self, input):
-        df = pd.read_csv('./ml/data.csv')
+        df = pd.read_csv('./ml/models/data/data.csv')
         df = df.rename(
             columns={'concave points_mean': 'concave_points_mean', 'concave points_worst': 'concave_points_worst'})
         df.drop(columns='Unnamed: 32', axis=1, inplace=True)

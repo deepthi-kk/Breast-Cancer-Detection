@@ -13,12 +13,17 @@ UPLOAD_FOLDER = './ml/models'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-ALLOWED_EXTENSIONS = set(['pkl'])
+ALLOWED_EXTENSIONS_MODEL_FILE = set(['pkl'])
+ALLOWED_EXTENSIONS_DATA_FILE = set(['csv'])
 ml_model = None
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def allowed_data_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS_DATA_FILE
+
+
+def allowed_model_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS_MODEL_FILE
 
 
 @app.route('/model-upload', methods=['POST'], endpoint='upload_file')
@@ -33,7 +38,7 @@ def upload_file():
         resp = jsonify({'message': 'No file selected for uploading'})
         resp.status_code = 400
         return resp
-    if file and allowed_file(file.filename):
+    if file and allowed_model_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         resp = jsonify({'message': 'File successfully uploaded'})
@@ -42,6 +47,30 @@ def upload_file():
         return resp
     else:
         resp = jsonify({'message': 'Allowed file type is pkl'})
+        resp.status_code = 400
+        return resp
+
+
+@app.route('/data-upload', methods=['POST'], endpoint='upload_data_file')
+def upload_data_file():
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        resp = jsonify({'message': 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+    file = request.files['file']
+    if file.filename == '':
+        resp = jsonify({'message': 'No file selected for uploading'})
+        resp.status_code = 400
+        return resp
+    if file and allowed_data_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'] + "/data/", filename))
+        resp = jsonify({'message': 'File successfully uploaded'})
+        resp.status_code = 201
+        return resp
+    else:
+        resp = jsonify({'message': 'Allowed file type is csv'})
         resp.status_code = 400
         return resp
 
