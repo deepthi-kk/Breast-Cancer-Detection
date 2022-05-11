@@ -12,6 +12,7 @@ class MachineLearningModel:
     def __init__(self) -> None:
         self.model = None
         self._fit2()
+        print("Model initialized")
 
     def _fit2(self) -> None:
         with open('./ml/models/model.pkl', 'rb') as f:
